@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/marelinaa/currency-api/services/currency/internal/domain"
-	"log"
 )
 
 // PostgresCurrencyRepository Пример реализации с использованием PostgreSQL
@@ -27,7 +26,6 @@ type CurrencyRepository interface { //todo: move to service layer
 }
 
 func (r *PostgresCurrencyRepository) Save(data domain.CurrencyData) error {
-	log.Println("я туть")
 	query := `
 		INSERT INTO currency_rate (date, rate)
 		VALUES ($1, $2)
@@ -35,7 +33,6 @@ func (r *PostgresCurrencyRepository) Save(data domain.CurrencyData) error {
 		DO UPDATE SET rate = EXCLUDED.rate
 	`
 
-	// Выполняем SQL-запрос на вставку или обновление
 	_, err := r.db.Exec(query, data.Date, data.Rate)
 	if err != nil {
 		return domain.ErrSavingCurrencyRate

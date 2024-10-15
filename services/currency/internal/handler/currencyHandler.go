@@ -28,7 +28,6 @@ func (h *CurrencyHandler) DefineRoutes(router *gin.Engine) {
 
 }
 
-// GetCurrencyByDate retrieves the currency rate for a specific date
 func (h *CurrencyHandler) GetCurrencyByDate(c *gin.Context) {
 	date := c.Param("date")
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -38,8 +37,6 @@ func main() {
 
 	worker := service.NewWorker(currencyService, cfg.Worker)
 	worker.Start()
-
-	fmt.Printf("%v\n", worker)
 
 	log.Println("Starting server on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

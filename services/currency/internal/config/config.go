@@ -31,7 +31,7 @@ func Load() AppConfig {
 		Worker: WorkerConfig{
 			ApiURL:             getEnv("CURRENCY_API_URL", "https://latest.currency-api.pages.dev/v1/currencies/rub.json"),
 			RunFetchingOnStart: getEnvAsBool("WORKER_RUN_ON_START", true),
-			RunTime:            parseRunTime(getEnv("WORKER_RUN_TIME", "00:00")), // Время запуска воркера (по умолчанию - полночь)
+			RunTime:            parseRunTime(getEnv("WORKER_RUN_TIME", "00:00")),
 		},
 	}
 }
@@ -54,7 +54,7 @@ func getEnvAsBool(key string, defaultValue bool) bool {
 
 // parseRunTime преобразует строку в объект time.Time (только время)
 func parseRunTime(timeString string) time.Time {
-	layout := "15:04" // ЧЧ:ММ
+	layout := "15:04"
 	t, err := time.Parse(layout, timeString)
 	if err != nil {
 		log.Fatalf("invalid WORKER_RUN_TIME format. Expected HH:MM, got: %s", timeString)
