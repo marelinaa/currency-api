@@ -2,8 +2,8 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/marelinaa/currency-api/services/currency/migrations"
 	"log"
 	"net/http"
 
@@ -12,6 +12,7 @@ import (
 	"github.com/marelinaa/currency-api/services/currency/internal/handler"
 	"github.com/marelinaa/currency-api/services/currency/internal/repository"
 	"github.com/marelinaa/currency-api/services/currency/internal/service"
+	"github.com/marelinaa/currency-api/services/currency/migrations"
 )
 
 func main() {
@@ -32,15 +33,14 @@ func main() {
 	currencyService := service.NewCurrencyService(repo)
 	currencyHandler := handler.NewCurrencyHandler(currencyService)
 
-	// Регистрация маршрутов
 	router := gin.Default()
 	currencyHandler.DefineRoutes(router)
 
-	// Инициализация и запуск воркера
 	worker := service.NewWorker(currencyService, cfg.Worker)
 	worker.Start()
 
-	// Запуск HTTP-сервера
+	fmt.Printf("%v\n", worker)
+
 	log.Println("Starting server on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

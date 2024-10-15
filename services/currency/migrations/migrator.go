@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-const migrationsPath = "migrations"
+const migrationsPath = "services/currency/migrations"
 
 func RunMigrations(dsn string) (err error) {
 	err = godotenv.Load()

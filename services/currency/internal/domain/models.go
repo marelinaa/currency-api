@@ -1,8 +1,13 @@
 package domain
 
-import "time"
-
 type CurrencyData struct {
-	Date time.Time `json:"date"`
-	Rate float64   `json:"rate"`
+	Date string  `json:"date"`
+	Rate float64 `json:"eur"`
+}
+
+type CurrencyResponse struct {
+	Date string `json:"date"`
+	Rub  struct {
+		Eur float64 `json:"eur"`
+	} `json:"rub"`
 }

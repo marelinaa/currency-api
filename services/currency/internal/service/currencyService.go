@@ -14,12 +14,24 @@ func NewCurrencyService(repo repository.CurrencyRepository) *CurrencyService {
 	return &CurrencyService{repo: repo}
 }
 
-func (s *CurrencyService) SaveCurrencyData(data domain.CurrencyData) error {
-	return s.repo.Save(data)
+func (s *CurrencyService) SaveCurrencyData(data domain.CurrencyResponse) error {
+	date, err := ValidateDate(data.Date)
+	if err != nil {
+		return err
+	}
+
+	var currency domain.CurrencyData
+
+	currency = domain.CurrencyData{
+		Date: date,
+		Rate: data.Rub.Eur,
+	}
+
+	return s.repo.Save(currency)
 }
 
 func (s *CurrencyService) GetCurrencyByDate(ctx context.Context, dateStr string) (domain.CurrencyData, error) {
-	date, err := ValidateAndParseDate(dateStr)
+	date, err := ValidateDate(dateStr)
 	if err != nil {
 		return domain.CurrencyData{}, err
 	}
@@ -28,12 +40,12 @@ func (s *CurrencyService) GetCurrencyByDate(ctx context.Context, dateStr string)
 }
 
 func (s *CurrencyService) GetCurrencyHistory(ctx context.Context, startDateStr, endDateStr string) ([]domain.CurrencyData, error) {
-	startDate, err := ValidateAndParseDate(startDateStr)
+	startDate, err := ValidateDate(startDateStr)
 	if err != nil {
 		return []domain.CurrencyData{}, err
 	}
 
-	endDate, err := ValidateAndParseDate(startDateStr)
+	endDate, err := ValidateDate(startDateStr)
 	if err != nil {
 		return []domain.CurrencyData{}, err
 	}

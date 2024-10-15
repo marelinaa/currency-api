@@ -3,10 +3,11 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/marelinaa/currency-api/services/currency/internal/config"
-	"github.com/marelinaa/currency-api/services/currency/internal/domain"
 	"net/http"
 	"time"
+
+	"github.com/marelinaa/currency-api/services/currency/internal/config"
+	"github.com/marelinaa/currency-api/services/currency/internal/domain"
 )
 
 type Worker struct {
@@ -62,12 +63,15 @@ func (w *Worker) fetchData() {
 		return
 	}
 
-	var currencyData domain.CurrencyData
-	if err := json.NewDecoder(resp.Body).Decode(&currencyData); err != nil {
+	var response domain.CurrencyResponse
+	//var currencyData domain.CurrencyData
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return
 	}
 
-	err = w.currencyService.SaveCurrencyData(currencyData) //todo: check this
+	fmt.Println(response.Date)
+
+	err = w.currencyService.SaveCurrencyData(response) //todo: check this
 	if err != nil {
 		return
 	}
