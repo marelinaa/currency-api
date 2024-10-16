@@ -4,8 +4,6 @@ import (
 	"log"
 	"os"
 	"time"
-
-	"github.com/joho/godotenv"
 )
 
 type WorkerConfig struct {
