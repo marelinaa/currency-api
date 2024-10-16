@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/marelinaa/currency-api/currency/internal/domain"
 	"github.com/marelinaa/currency-api/currency/internal/repository"
 )

@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/marelinaa/currency-api/currency/internal/domain"
 	"github.com/marelinaa/currency-api/currency/internal/service"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )

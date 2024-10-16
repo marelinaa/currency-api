@@ -2,17 +2,17 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 
-	_ "github.com/lib/pq"
 	"github.com/marelinaa/currency-api/currency/internal/config"
 	"github.com/marelinaa/currency-api/currency/internal/handler"
 	"github.com/marelinaa/currency-api/currency/internal/repository"
 	"github.com/marelinaa/currency-api/currency/internal/service"
 	"github.com/marelinaa/currency-api/currency/migrations"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 func main() {

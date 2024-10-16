@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+
 	"github.com/marelinaa/currency-api/currency/internal/domain"
 )
 
