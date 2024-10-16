@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/marelinaa/currency-api/services/currency/internal/domain"
 	"github.com/marelinaa/currency-api/services/currency/internal/service"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -64,52 +65,3 @@ func (h *CurrencyHandler) GetCurrencyHistory(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"history": history})
 }
-
-//// GetLatestCurrencyRate retrieves the latest currency rate
-//func (h *CurrencyHandler) GetLatestCurrencyRate(c *gin.Context) {
-//	rate, err := h.service.GetLatestRate()
-//	if err != nil {
-//		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-//		return
-//	}
-//	c.JSON(http.StatusOK, gin.H{"rate": rate})
-//}
-
-//
-//func (h *CurrencyHandler) GetCurrencyByDate(w http.ResponseWriter, r *http.Request) {
-//	dateStr := r.URL.Query().Get("date")
-//	date, err := time.Parse("2006-01-02", dateStr)
-//	if err != nil {
-//		http.Error(w, "Invalid date format", http.StatusBadRequest)
-//		return
-//	}
-//
-//	currencyData, err := h.currencyService.GetCurrencyByDate(date)
-//	if err != nil {
-//		http.Error(w, "Currency data not found", http.StatusNotFound)
-//		return
-//	}
-//
-//	json.NewEncoder(w).Encode(currencyData)
-//}
-//
-//func (h *CurrencyHandler) GetCurrencyHistory(w http.ResponseWriter, r *http.Request) {
-//	startDateStr := r.URL.Query().Get("start")
-//	endDateStr := r.URL.Query().Get("end")
-//
-//	startDate, err := time.Parse("2006-01-02", startDateStr)
-//	endDate, err := time.Parse("2006-01-02", endDateStr)
-//
-//	if err != nil {
-//		http.Error(w, "Invalid date format", http.StatusBadRequest)
-//		return
-//	}
-//
-//	currencyHistory, err := h.currencyService.GetCurrencyHistory(startDate, endDate)
-//	if err != nil {
-//		http.Error(w, "Currency data not found", http.StatusNotFound)
-//		return
-//	}
-//
-//	json.NewEncoder(w).Encode(currencyHistory)
-//}
