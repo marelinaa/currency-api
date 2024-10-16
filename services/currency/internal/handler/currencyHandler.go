@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 
-	"github.com/marelinaa/currency-api/services/currency/internal/domain"
-	"github.com/marelinaa/currency-api/services/currency/internal/service"
+	"github.com/marelinaa/currency-api/currency/internal/domain"
+	"github.com/marelinaa/currency-api/currency/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -49,8 +49,8 @@ func (h *CurrencyHandler) GetCurrencyByDate(c *gin.Context) {
 
 // GetCurrencyHistory retrieves the currency rate history for a specified period
 func (h *CurrencyHandler) GetCurrencyHistory(c *gin.Context) {
-	startDate := c.Query("start")
-	endDate := c.Query("end")
+	startDate := c.Param("startDate")
+	endDate := c.Param("endDate")
 
 	if startDate == "" || endDate == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate})

@@ -14,21 +14,16 @@ type WorkerConfig struct {
 	RunTime            time.Time
 }
 
-// AppConfig представляет общую конфигурацию для вашего приложения
 type AppConfig struct {
 	DatabaseURL string
+	APIPort     string
 	Worker      WorkerConfig
 }
 
-// Load загружает конфигурацию из переменных среды или по умолчанию
 func Load() AppConfig {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("no .env file found, using default values.")
-	}
-
 	return AppConfig{
-		DatabaseURL: getEnv("DB_URL", "postgres://postgres:p1111@localhost:5432/currency_db"),
+		DatabaseURL: getEnv("DB_URL", "postgres://postgres:p1111@localhost:5432/currency_db?sslmode=disable"),
+		APIPort:     getEnv("API_PORT", "8080"),
 		Worker: WorkerConfig{
 			ApiURL:             getEnv("CURRENCY_API_URL", "https://latest.currency-api.pages.dev/v1/currencies/rub.json"),
 			RunFetchingOnStart: getEnvAsBool("WORKER_RUN_ON_START", true),
@@ -37,7 +32,6 @@ func Load() AppConfig {
 	}
 }
 
-// getEnv считывает переменные среды с указанием значения по умолчанию
 func getEnv(key, defaultValue string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
@@ -45,7 +39,6 @@ func getEnv(key, defaultValue string) string {
 	return defaultValue
 }
 
-// getEnvAsBool возвращает значение переменной среды как bool
 func getEnvAsBool(key string, defaultValue bool) bool {
 	if value, exists := os.LookupEnv(key); exists {
 		return value == "true"
@@ -53,7 +46,6 @@ func getEnvAsBool(key string, defaultValue bool) bool {
 	return defaultValue
 }
 
-// parseRunTime преобразует строку в объект time.Time (только время)
 func parseRunTime(timeString string) time.Time {
 	layout := "15:04"
 	t, err := time.Parse(layout, timeString)
