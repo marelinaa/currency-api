@@ -3,7 +3,6 @@ package handler
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io"
 	"log"
 	"net/http"
@@ -11,6 +10,8 @@ import (
 
 	"github.com/marelinaa/currency-api/gateway/internal/domain"
 	"github.com/marelinaa/currency-api/gateway/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type GatewayHandler struct {

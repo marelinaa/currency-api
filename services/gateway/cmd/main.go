@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	_ "github.com/lib/pq"
+	"log"
+	"net/http"
+
 	"github.com/marelinaa/currency-api/gateway/internal/config"
 	"github.com/marelinaa/currency-api/gateway/internal/handler"
 	"github.com/marelinaa/currency-api/gateway/internal/service"
 
-	"log"
-	"net/http"
+	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 func main() {
