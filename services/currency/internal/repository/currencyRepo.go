@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"github.com/marelinaa/currency-api/services/currency/internal/domain"
+	"github.com/marelinaa/currency-api/currency/internal/domain"
 )
 
 // PostgresCurrencyRepository Пример реализации с использованием PostgreSQL
