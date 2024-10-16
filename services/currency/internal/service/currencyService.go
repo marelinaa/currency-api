@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/marelinaa/currency-api/services/currency/internal/domain"
-	"github.com/marelinaa/currency-api/services/currency/internal/repository"
+	"github.com/marelinaa/currency-api/currency/internal/domain"
+	"github.com/marelinaa/currency-api/currency/internal/repository"
 )
 
 type CurrencyService struct {
@@ -45,7 +45,7 @@ func (s *CurrencyService) GetCurrencyHistory(ctx context.Context, startDateStr, 
 		return []domain.CurrencyData{}, err
 	}
 
-	endDate, err := ValidateDate(startDateStr)
+	endDate, err := ValidateDate(endDateStr)
 	if err != nil {
 		return []domain.CurrencyData{}, err
 	}

@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/marelinaa/currency-api/services/currency/internal/config"
-	"github.com/marelinaa/currency-api/services/currency/internal/domain"
+	"github.com/marelinaa/currency-api/currency/internal/config"
+	"github.com/marelinaa/currency-api/currency/internal/domain"
 )
 
 type Worker struct {
