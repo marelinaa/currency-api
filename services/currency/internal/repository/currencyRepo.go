@@ -8,7 +8,6 @@ import (
 	"github.com/marelinaa/currency-api/currency/internal/domain"
 )
 
-// PostgresCurrencyRepository Пример реализации с использованием PostgreSQL
 type PostgresCurrencyRepository struct {
 	db *sql.DB
 }
@@ -18,12 +17,6 @@ func NewRepository(db *sql.DB) *PostgresCurrencyRepository {
 	return &PostgresCurrencyRepository{
 		db: db,
 	}
-}
-
-type CurrencyRepository interface { //todo: move to service layer
-	Save(data domain.CurrencyData) error
-	FindByDate(ctx context.Context, date string) (domain.CurrencyData, error)
-	FindInRange(ctx context.Context, startDate, endDate string) ([]domain.CurrencyData, error)
 }
 
 func (r *PostgresCurrencyRepository) Save(data domain.CurrencyData) error {

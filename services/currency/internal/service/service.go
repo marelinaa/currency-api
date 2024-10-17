@@ -4,14 +4,19 @@ import (
 	"context"
 
 	"github.com/marelinaa/currency-api/currency/internal/domain"
-	"github.com/marelinaa/currency-api/currency/internal/repository"
 )
 
-type CurrencyService struct {
-	repo repository.CurrencyRepository
+type CurrencyRepository interface {
+	Save(data domain.CurrencyData) error
+	FindByDate(ctx context.Context, date string) (domain.CurrencyData, error)
+	FindInRange(ctx context.Context, startDate, endDate string) ([]domain.CurrencyData, error)
 }
 
-func NewCurrencyService(repo repository.CurrencyRepository) *CurrencyService {
+type CurrencyService struct {
+	repo CurrencyRepository
+}
+
+func NewCurrencyService(repo CurrencyRepository) *CurrencyService {
 	return &CurrencyService{repo: repo}
 }
 
@@ -47,6 +52,11 @@ func (s *CurrencyService) GetCurrencyHistory(ctx context.Context, startDateStr, 
 	}
 
 	endDate, err := ValidateDate(endDateStr)
+	if err != nil {
+		return []domain.CurrencyData{}, err
+	}
+
+	err = ValidatePeriod(startDate, endDate)
 	if err != nil {
 		return []domain.CurrencyData{}, err
 	}

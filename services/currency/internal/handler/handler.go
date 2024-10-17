@@ -17,18 +17,19 @@ func NewCurrencyHandler(currencyService *service.CurrencyService) *CurrencyHandl
 	return &CurrencyHandler{currencyService: currencyService}
 }
 
+// DefineRoutes defines routes for handling currency-related API endpoints
 func (h *CurrencyHandler) DefineRoutes(router *gin.Engine) {
 	v1 := router.Group("/v1")
 
-	// Protected currency routes (require authorization)
-	currency := v1.Group("/currency") // todo: currency := v1.Group("/currency", middleware.Authorize())
+	currency := v1.Group("/currency")
 	{
-		currency.GET("/date/:date", h.GetCurrencyByDate)                   // todo: убрать date
-		currency.GET("/history/:startDate/:endDate", h.GetCurrencyHistory) // todo: убрать history
+		currency.GET("/date/:date", h.GetCurrencyByDate)
+		currency.GET("/history/:startDate/:endDate", h.GetCurrencyHistory)
 	}
 
 }
 
+// GetCurrencyByDate retrieves the currency rate for a specific date from the currency service
 func (h *CurrencyHandler) GetCurrencyByDate(c *gin.Context) {
 	date := c.Param("date")
 
@@ -47,7 +48,7 @@ func (h *CurrencyHandler) GetCurrencyByDate(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"date": date, "rate": rate})
 }
 
-// GetCurrencyHistory retrieves the currency rate history for a specified period
+// GetCurrencyHistory retrieves the currency rate history for a specified period from the currency service
 func (h *CurrencyHandler) GetCurrencyHistory(c *gin.Context) {
 	startDate := c.Param("startDate")
 	endDate := c.Param("endDate")
