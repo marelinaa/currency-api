@@ -75,6 +75,7 @@ func (r *PostgresCurrencyRepository) FindInRange(ctx context.Context, startDate,
 		if err := rows.Scan(&currency.Date, &currency.Rate); err != nil {
 			return nil, err
 		}
+
 		history = append(history, currency)
 	}
 
