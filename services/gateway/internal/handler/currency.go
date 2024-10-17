@@ -68,7 +68,7 @@ func (h *GatewayHandler) GetCurrencyHistory(c *gin.Context) {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": string(body)})
+		c.JSON(resp.StatusCode, gin.H{"error": string(body)})
 		log.Println("error here gateway")
 
 		return

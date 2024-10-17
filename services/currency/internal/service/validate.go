@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"github.com/marelinaa/currency-api/currency/internal/domain"
 	"log"
 	"time"
@@ -41,7 +40,7 @@ func ValidatePeriod(startDate, endDate string) error {
 	}
 
 	if startDateTime.After(endDateTime) {
-		return fmt.Errorf("end date can not be earlier, than start date")
+		return domain.ErrFutureDate
 	}
 
 	return nil
