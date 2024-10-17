@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"log"
 	"net/http"
 
@@ -42,6 +43,11 @@ func (h *CurrencyHandler) GetCurrencyByDate(c *gin.Context) {
 
 	rate, err := h.currencyService.GetCurrencyByDate(c, date)
 	if err != nil {
+		if errors.Is(err, domain.ErrFutureDate) || errors.Is(err, domain.ErrParsingDate) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 
 		return

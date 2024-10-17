@@ -19,7 +19,7 @@ func ValidateDate(dateStr string) (string, error) {
 	}
 
 	if date.After(time.Now()) {
-		return "", fmt.Errorf("date cannot be in the future")
+		return "", domain.ErrFutureDate
 	}
 
 	return dateStr, nil
