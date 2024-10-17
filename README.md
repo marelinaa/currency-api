@@ -1,6 +1,6 @@
 # Currency API
 
-This repository contains a Currency API project that will provide users a daily currency exchange rate.
+This repository contains a Currency API project that provides users a daily currency exchange rate.
 
 ## How to Run
 
