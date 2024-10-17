@@ -70,7 +70,7 @@ func (w *Worker) retrieveData() {
 
 	fmt.Println(response.Date)
 
-	err = w.currencyService.SaveCurrencyData(response) //todo: check this
+	err = w.currencyService.SaveCurrencyData(response)
 	if err != nil {
 		return
 	}
