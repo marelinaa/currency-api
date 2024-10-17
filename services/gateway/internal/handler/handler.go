@@ -26,7 +26,7 @@ func (h *GatewayHandler) DefineRoutes(router *gin.Engine) {
 
 	currency := v1.Group("/currency", h.Authorize())
 	{
-		currency.GET("/date/:date", h.GetCurrencyByDate)
-		currency.GET("/history/:startDate/:endDate", h.GetCurrencyHistory)
+		currency.GET("/date", h.GetCurrencyByDate)
+		currency.GET("/history", h.GetCurrencyHistory)
 	}
 }

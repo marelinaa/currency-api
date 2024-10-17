@@ -16,8 +16,8 @@ func main() {
 	cfg := config.Load()
 
 	users := map[string]string{
-		"Artyom": "12345",
-		"Elya":   "54321",
+		"user1": "12345",
+		"user2": "54321",
 	}
 	gatewayService := service.NewGatewayService(users)
 

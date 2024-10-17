@@ -23,7 +23,9 @@ services:
     ports:
       - "5433:5432"
   currency:
-    image: currency:latest
+    build:
+      context: ./services/currency
+      dockerfile: Dockerfile
     container_name: currency_container
     restart: unless-stopped
     environment:
@@ -38,7 +40,9 @@ services:
       postgres:
         condition: service_healthy
   gateway:
-    image: gateway:latest
+    build:
+      context: ./services/gateway
+      dockerfile: Dockerfile
     container_name: gateway_container
     environment:
       API_PORT: "8088"

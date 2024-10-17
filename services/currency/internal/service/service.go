@@ -44,17 +44,7 @@ func (s *CurrencyService) GetCurrencyByDate(ctx context.Context, dateStr string)
 		return domain.CurrencyData{}, err
 	}
 
-	currencyData, err := s.repo.FindByDate(ctx, date)
-	if err != nil {
-		return domain.CurrencyData{}, err
-	}
-
-	currencyData.Date, err = RemoveTimeFromDateString(currencyData.Date)
-	if err != nil {
-		return domain.CurrencyData{}, err
-	}
-
-	return currencyData, nil
+	return s.repo.FindByDate(ctx, date)
 }
 
 // GetCurrencyHistory retrieves historical currency data within a specified date range after validating the start and end dates

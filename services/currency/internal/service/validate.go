@@ -14,6 +14,7 @@ func ValidateDate(dateStr string) (string, error) {
 	date, err := time.Parse(layout, dateStr)
 	if err != nil {
 		log.Printf("error while parsing date: %v", err)
+
 		return "", domain.ErrParsingDate
 	}
 
@@ -44,15 +45,4 @@ func ValidatePeriod(startDate, endDate string) error {
 	}
 
 	return nil
-}
-
-func RemoveTimeFromDateString(dateTimeString string) (string, error) {
-	layout := "2006-01-02T15:04:05Z"
-	parsedTime, err := time.Parse(layout, dateTimeString)
-	if err != nil {
-		return "", fmt.Errorf("error while parsing date: %v", err)
-	}
-
-	dateString := parsedTime.Format("2006-01-02")
-	return dateString, nil
 }

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/marelinaa/currency-api/gateway/internal/domain"
@@ -19,7 +18,6 @@ func (h *GatewayHandler) SignIn(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error decoding request body"})
 		return
 	}
-	log.Println(req)
 
 	err := h.service.SignIn(req)
 	if err != nil {
@@ -36,7 +34,6 @@ func (h *GatewayHandler) SignIn(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	log.Println(token)
 
 	c.JSON(http.StatusCreated, gin.H{"token": token})
 }
@@ -55,7 +52,6 @@ func (h *GatewayHandler) requestToken(login string) (string, error) {
 		return "", fmt.Errorf("client.Do: %w", err)
 	}
 	defer resp.Body.Close()
-	log.Println(resp)
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)

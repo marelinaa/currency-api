@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/marelinaa/currency-api/gateway/internal/domain"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,13 +12,19 @@ import (
 
 // GetCurrencyByDate retrieves currency data for a specific date from the currency service
 func (h *GatewayHandler) GetCurrencyByDate(c *gin.Context) {
-	date := c.Param("date")
+	date := c.Query("date")
+	if date == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate.Error()})
 
-	url := fmt.Sprintf("http://%s/v1/currency/date/%s", h.currencyServiceURL, date)
+		return
+	}
+
+	url := fmt.Sprintf("http://%s/v1/currency/date?date=%s", h.currencyServiceURL, date)
 	req, err := http.NewRequest("GET", url, nil)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch currency data"})
+
 		return
 	}
 	defer resp.Body.Close()
@@ -25,12 +32,14 @@ func (h *GatewayHandler) GetCurrencyByDate(c *gin.Context) {
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": string(body)})
+
 		return
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": domain.ErrReadingResponse})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": domain.ErrReadingResponse.Error()})
+
 		return
 	}
 
@@ -39,10 +48,15 @@ func (h *GatewayHandler) GetCurrencyByDate(c *gin.Context) {
 
 // GetCurrencyHistory retrieves historical currency data within a specified date range from the currency service
 func (h *GatewayHandler) GetCurrencyHistory(c *gin.Context) {
-	startDate := c.Param("startDate")
-	endDate := c.Param("endDate")
+	startDate := c.Query("startDate")
+	endDate := c.Query("endDate")
+	if startDate == "" || endDate == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate.Error()})
 
-	url := fmt.Sprintf("http://%s/v1/currency/history/%s/%s", h.currencyServiceURL, startDate, endDate)
+		return
+	}
+
+	url := fmt.Sprintf("http://%s/v1/currency/history?startDate=%s&endDate=%s", h.currencyServiceURL, startDate, endDate)
 	req, err := http.NewRequest("GET", url, nil)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -55,12 +69,15 @@ func (h *GatewayHandler) GetCurrencyHistory(c *gin.Context) {
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": string(body)})
+		log.Println("error here gateway")
+
 		return
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": domain.ErrReadingResponse})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": domain.ErrReadingResponse.Error()})
+
 		return
 	}
 
