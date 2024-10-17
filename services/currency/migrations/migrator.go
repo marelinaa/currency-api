@@ -8,7 +8,7 @@ import (
 	"github.com/pressly/goose"
 )
 
-const migrationsPath = "/currency/migrations"
+const migrationsPath = "."
 
 func RunMigrations(dsn string) (err error) {
 
