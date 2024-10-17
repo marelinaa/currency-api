@@ -19,6 +19,7 @@ func NewRepository(db *sql.DB) *PostgresCurrencyRepository {
 	}
 }
 
+// Save saves currency data to the database, updating the rate if the date already exists
 func (r *PostgresCurrencyRepository) Save(data domain.CurrencyData) error {
 	query := `
 		INSERT INTO currency_rate (date, rate)
@@ -35,6 +36,7 @@ func (r *PostgresCurrencyRepository) Save(data domain.CurrencyData) error {
 	return nil
 }
 
+// FindByDate finds and returns currency data for a specific date from the database
 func (r *PostgresCurrencyRepository) FindByDate(ctx context.Context, date string) (domain.CurrencyData, error) {
 	var currency domain.CurrencyData
 	querySelect := `SELECT date, rate 
@@ -53,6 +55,7 @@ func (r *PostgresCurrencyRepository) FindByDate(ctx context.Context, date string
 	return currency, nil
 }
 
+// FindInRange finds and returns a list of currency data within a specified date range from the database
 func (r *PostgresCurrencyRepository) FindInRange(ctx context.Context, startDate, endDate string) ([]domain.CurrencyData, error) {
 	var history []domain.CurrencyData
 

@@ -20,6 +20,7 @@ func NewCurrencyService(repo CurrencyRepository) *CurrencyService {
 	return &CurrencyService{repo: repo}
 }
 
+// SaveCurrencyData validates the date in the currency response, creates a CurrencyData struct, and saves it using the repository
 func (s *CurrencyService) SaveCurrencyData(data domain.CurrencyResponse) error {
 	date, err := ValidateDate(data.Date)
 	if err != nil {
@@ -36,6 +37,7 @@ func (s *CurrencyService) SaveCurrencyData(data domain.CurrencyResponse) error {
 	return s.repo.Save(currency)
 }
 
+// GetCurrencyByDate retrieves currency data for a specific date after validating the date format
 func (s *CurrencyService) GetCurrencyByDate(ctx context.Context, dateStr string) (domain.CurrencyData, error) {
 	date, err := ValidateDate(dateStr)
 	if err != nil {
@@ -45,6 +47,7 @@ func (s *CurrencyService) GetCurrencyByDate(ctx context.Context, dateStr string)
 	return s.repo.FindByDate(ctx, date)
 }
 
+// GetCurrencyHistory retrieves historical currency data within a specified date range after validating the start and end dates
 func (s *CurrencyService) GetCurrencyHistory(ctx context.Context, startDateStr, endDateStr string) ([]domain.CurrencyData, error) {
 	startDate, err := ValidateDate(startDateStr)
 	if err != nil {

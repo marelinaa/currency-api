@@ -11,38 +11,38 @@ import (
 )
 
 type Worker struct {
-	currencyService *CurrencyService
-	externalURL     string
-	RunImmediately  bool
-	RunTime         time.Time
+	currencyService     *CurrencyService
+	externalURL         string
+	RetrieveImmediately bool
+	RetrieveTime        time.Time
 }
 
 func NewWorker(currencyService *CurrencyService, workerConfig config.WorkerConfig) *Worker {
 	return &Worker{
-		currencyService: currencyService,
-		externalURL:     workerConfig.ApiURL,
-		RunImmediately:  workerConfig.RunFetchingOnStart,
-		RunTime:         workerConfig.RunTime,
+		currencyService:     currencyService,
+		externalURL:         workerConfig.ApiURL,
+		RetrieveImmediately: workerConfig.RunFetchingOnStart,
+		RetrieveTime:        workerConfig.RunTime,
 	}
 }
 
 func (w *Worker) Start() {
-	if w.RunImmediately {
-		go w.fetchData()
+	if w.RetrieveImmediately {
+		go w.retrieveData()
 	}
 
 	go func() {
 		for {
-			nextRun := w.calculateNextRunTime(time.Now())
-			time.Sleep(time.Until(nextRun))
+			nextRetrieve := w.calculateNextRetrieveTime(time.Now())
+			time.Sleep(time.Until(nextRetrieve))
 
-			go w.fetchData()
+			go w.retrieveData()
 		}
 	}()
 }
 
-func (w *Worker) calculateNextRunTime(currentTime time.Time) time.Time {
-	nextRun := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), w.RunTime.Hour(), w.RunTime.Minute(), 0, 0, currentTime.Location())
+func (w *Worker) calculateNextRetrieveTime(currentTime time.Time) time.Time {
+	nextRun := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), w.RetrieveTime.Hour(), w.RetrieveTime.Minute(), 0, 0, currentTime.Location())
 
 	if currentTime.After(nextRun) {
 		nextRun = nextRun.Add(24 * time.Hour)
@@ -51,7 +51,7 @@ func (w *Worker) calculateNextRunTime(currentTime time.Time) time.Time {
 	return nextRun
 }
 
-func (w *Worker) fetchData() {
+func (w *Worker) retrieveData() {
 	url := fmt.Sprintf("%s", w.externalURL)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -64,7 +64,6 @@ func (w *Worker) fetchData() {
 	}
 
 	var response domain.CurrencyResponse
-	//var currencyData domain.CurrencyData
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return
 	}
