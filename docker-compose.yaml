@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  auth-generator:
+    image: andrianovartemii/gm-test-task-auth-generator:latest
+    container_name: auth_service
+    ports:
+      - "8082:8080"
+    environment:
+      AUTH_TOKEN_LIFETIME: 20
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "p1111"
+      POSTGRES_DB: "currency_db"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
+      interval: 2s
+      timeout: 2s
+      retries: 3
+    ports:
+      - "5433:5432"
+  currency:
+    image: currency:latest
+    container_name: currency_container
+    restart: unless-stopped
+    environment:
+      DB_URL: "postgres://postgres:p1111@postgres:5432/currency_db?sslmode=disable"
+      API_PORT: "8080"
+      CURRENCY_API_URL: "https://latest.currency-api.pages.dev/v1/currencies/rub.json"
+      WORKER_RUN_ON_START : true
+      WORKER_RUN_TIME: "00:00"
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  gateway:
+    image: gateway:latest
+    container_name: gateway_container
+    environment:
+      API_PORT: "8088"
+      AUTH_URL: "auth-generator:8080"
+      CURRENCY_URL: "currency:8080"
+    ports:
+      - "8080:8088"
