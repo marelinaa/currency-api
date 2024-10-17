@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -27,7 +28,10 @@ func NewWorker(currencyService *CurrencyService, workerConfig config.WorkerConfi
 }
 
 func (w *Worker) Start() {
+	log.Println("Start worker")
 	if w.RetrieveImmediately {
+		log.Println("Retrieve immediately")
+
 		go w.retrieveData()
 	}
 
@@ -44,6 +48,8 @@ func (w *Worker) Start() {
 func (w *Worker) calculateNextRetrieveTime(currentTime time.Time) time.Time {
 	nextRun := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), w.RetrieveTime.Hour(), w.RetrieveTime.Minute(), 0, 0, currentTime.Location())
 
+	log.Printf("Next retrieve is scheduled for: %s", nextRun)
+
 	if currentTime.After(nextRun) {
 		nextRun = nextRun.Add(24 * time.Hour)
 	}
@@ -53,8 +59,11 @@ func (w *Worker) calculateNextRetrieveTime(currentTime time.Time) time.Time {
 
 func (w *Worker) retrieveData() {
 	url := fmt.Sprintf("%s", w.externalURL)
+	log.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
+		log.Println(err)
+
 		return
 	}
 	defer resp.Body.Close()
@@ -68,10 +77,14 @@ func (w *Worker) retrieveData() {
 		return
 	}
 
-	fmt.Println(response.Date)
+	log.Println(response.Date)
 
 	err = w.currencyService.SaveCurrencyData(response)
 	if err != nil {
 		return
 	}
+
+	log.Println("Fetched data and saved")
 }
+
+//query

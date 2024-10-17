@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/marelinaa/currency-api/currency/internal/domain"
@@ -23,17 +24,17 @@ func (h *CurrencyHandler) DefineRoutes(router *gin.Engine) {
 
 	currency := v1.Group("/currency")
 	{
-		currency.GET("/date/:date", h.GetCurrencyByDate)
-		currency.GET("/history/:startDate/:endDate", h.GetCurrencyHistory)
+		currency.GET("/date", h.GetCurrencyByDate)
+		currency.GET("/history", h.GetCurrencyHistory)
 	}
 
 }
 
 // GetCurrencyByDate retrieves the currency rate for a specific date from the currency service
 func (h *CurrencyHandler) GetCurrencyByDate(c *gin.Context) {
-	date := c.Param("date")
-
+	date := c.Query("date")
 	if date == "" {
+		log.Println("date is empty")
 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate})
 
 		return
@@ -50,8 +51,8 @@ func (h *CurrencyHandler) GetCurrencyByDate(c *gin.Context) {
 
 // GetCurrencyHistory retrieves the currency rate history for a specified period from the currency service
 func (h *CurrencyHandler) GetCurrencyHistory(c *gin.Context) {
-	startDate := c.Param("startDate")
-	endDate := c.Param("endDate")
+	startDate := c.Query("startDate")
+	endDate := c.Query("endDate")
 
 	if startDate == "" || endDate == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate})
@@ -62,6 +63,7 @@ func (h *CurrencyHandler) GetCurrencyHistory(c *gin.Context) {
 	history, err := h.currencyService.GetCurrencyHistory(c, startDate, endDate)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		log.Println("error here")
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"history": history})
