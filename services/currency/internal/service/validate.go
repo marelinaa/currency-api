@@ -14,6 +14,7 @@ func ValidateDate(dateStr string) (string, error) {
 	date, err := time.Parse(layout, dateStr)
 	if err != nil {
 		log.Printf("error while parsing date: %v", err)
+
 		return "", domain.ErrParsingDate
 	}
 

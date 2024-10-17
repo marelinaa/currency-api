@@ -14,7 +14,7 @@ import (
 func (h *GatewayHandler) GetCurrencyByDate(c *gin.Context) {
 	date := c.Query("date")
 	if date == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate})
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate.Error()})
 
 		return
 	}
@@ -38,7 +38,7 @@ func (h *GatewayHandler) GetCurrencyByDate(c *gin.Context) {
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": domain.ErrReadingResponse})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": domain.ErrReadingResponse.Error()})
 
 		return
 	}
@@ -50,9 +50,8 @@ func (h *GatewayHandler) GetCurrencyByDate(c *gin.Context) {
 func (h *GatewayHandler) GetCurrencyHistory(c *gin.Context) {
 	startDate := c.Query("startDate")
 	endDate := c.Query("endDate")
-	log.Println(startDate, endDate)
 	if startDate == "" || endDate == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate})
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate.Error()})
 
 		return
 	}
@@ -77,7 +76,7 @@ func (h *GatewayHandler) GetCurrencyHistory(c *gin.Context) {
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": domain.ErrReadingResponse})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": domain.ErrReadingResponse.Error()})
 
 		return
 	}

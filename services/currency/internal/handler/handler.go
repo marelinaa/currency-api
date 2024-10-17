@@ -35,7 +35,7 @@ func (h *CurrencyHandler) GetCurrencyByDate(c *gin.Context) {
 	date := c.Query("date")
 	if date == "" {
 		log.Println("date is empty")
-		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate})
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate.Error()})
 
 		return
 	}
@@ -55,7 +55,7 @@ func (h *CurrencyHandler) GetCurrencyHistory(c *gin.Context) {
 	endDate := c.Query("endDate")
 
 	if startDate == "" || endDate == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate})
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrEmptyDate.Error()})
 
 		return
 	}

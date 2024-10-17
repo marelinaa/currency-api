@@ -47,7 +47,6 @@ func (w *Worker) Start() {
 
 func (w *Worker) calculateNextRetrieveTime(currentTime time.Time) time.Time {
 	nextRun := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), w.RetrieveTime.Hour(), w.RetrieveTime.Minute(), 0, 0, currentTime.Location())
-
 	log.Printf("Next retrieve is scheduled for: %s", nextRun)
 
 	if currentTime.After(nextRun) {
@@ -59,10 +58,8 @@ func (w *Worker) calculateNextRetrieveTime(currentTime time.Time) time.Time {
 
 func (w *Worker) retrieveData() {
 	url := fmt.Sprintf("%s", w.externalURL)
-	log.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Println(err)
 
 		return
 	}
@@ -77,8 +74,6 @@ func (w *Worker) retrieveData() {
 		return
 	}
 
-	log.Println(response.Date)
-
 	err = w.currencyService.SaveCurrencyData(response)
 	if err != nil {
 		return
@@ -86,5 +81,3 @@ func (w *Worker) retrieveData() {
 
 	log.Println("Fetched data and saved")
 }
-
-//query
